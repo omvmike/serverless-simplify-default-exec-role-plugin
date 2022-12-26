@@ -9,7 +9,7 @@ It searches for the `IamRoleLambdaExecution` resource and modifies the only poli
 ## Install
 
 ```
-$ yarn add --dev @shelf/serverless-simplify-default-exec-role-plugin
+$ npm i -D git+https://git@github.com:omvmike/serverless-simplify-default-exec-role-plugin.git
 ```
 
 ## Usage
@@ -18,7 +18,7 @@ In your `serverless.yml` file:
 
 ```yaml
 plugins:
-  - '@shelf/serverless-simplify-default-exec-role-plugin'
+  - serverless-simplify-default-exec-role-plugin
 ```
 
 ## Explanation
@@ -60,15 +60,23 @@ This plugin simplifies the default execution role to smth like this:
 }
 ```
 
-## Publish
+## Customization
 
-```sh
-$ git checkout master
-$ yarn version
-$ yarn publish
-$ git push origin master --tags
+You can add your own policies by adding `custom.simplifyDefaultExecRole` section to your `serverless.yml` file:
+
+For example, if you want to add elastic file system permissions
+
+```yaml
+simplifyDefaultExecRole:
+  policies:
+    - Effect: Allow
+      Action:
+        - "elasticfilesystem:ClientMount"
+        - "elasticfilesystem:ClientWrite"
+      Resource:
+        -  "arn:aws:elasticfilesystem:us-east-1:123456789012:file-system/fs-12345678"  // replace with your own
 ```
 
 ## License
 
-MIT © [Shelf](https://shelf.io)
+MIT ©
