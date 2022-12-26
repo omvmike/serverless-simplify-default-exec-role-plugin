@@ -12,7 +12,7 @@ const policyStatements = [{
 
 class SimplifyDefaultExecRole {
   constructor(serverless) {
-    this.policy = (this.service.custom && this.service.custom.iamRoleLambdaExecutionPolicy) || policyStatements;
+    this.policy = (serverless.service.custom && serverless.service.custom.iamRoleLambdaExecutionPolicy) || policyStatements;
     this.hooks = {
       'before:package:finalize': function() {
         simplifyBaseIAMLogGroups(serverless, this.policy);
