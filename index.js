@@ -12,20 +12,21 @@ const policyStatements = [{
 
 class SimplifyDefaultExecRole {
   constructor(serverless) {
+    this.policy = (this.service.custom && this.service.custom.iamRoleLambdaExecutionPolicy) || policyStatements;
     this.hooks = {
       'before:package:finalize': function() {
-        simplifyBaseIAMLogGroups(serverless);
+        simplifyBaseIAMLogGroups(serverless, this.policy);
       }
     };
   }
 }
 
-function simplifyBaseIAMLogGroups(serverless) {
+function simplifyBaseIAMLogGroups(serverless, policy) {
   const resourceSection = serverless.service.provider.compiledCloudFormationTemplate.Resources;
 
   for (const key in resourceSection) {
     if (key === 'IamRoleLambdaExecution') {
-      resourceSection[key].Properties.Policies[0].PolicyDocument.Statement = policyStatements;
+      resourceSection[key].Properties.Policies[0].PolicyDocument.Statement = policy;
     }
   }
 }
